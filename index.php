@@ -44,19 +44,7 @@ if (isset($_POST['action'])) {
 
       $id = $_POST['id'];
       if(is_numeric($id)) {
-        $etatActuel = $db->query('SELECT done from todo WHERE id = '. $id);
-        $etatActuel->execute();
-        $etatActuel = $etatActuel->fetch(PDO::FETCH_ASSOC);
-        if ($etatActuel == 1) {
-          $nouvelEtat = 0;
-        } else {
-          $nouvelEtat = 1;
-        }
-        
-       /*  $nouvelEtat = $etatActuel['done'] == 1 ? 0:1; */
-        echo $nouvelEtat;
-        echo $nouvelEtat;
-        $updateQuery = 'UPDATE todo SET done = '. $nouvelEtat. 'WHERE id = '. $id;
+        $updateQuery = 'UPDATE todo SET done = NOT done WHERE id ='. $id;
         if(!$db->query($updateQuery)) {
           die(print_r($db->errorInfo(), true));
         }
