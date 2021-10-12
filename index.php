@@ -5,11 +5,11 @@
 // "http://localhost:8888/comem-archidep-php-todo-exercise/", then BASE_URL
 // should be "/comem-archidep-php-todo-exercise/". If you are accessing the
 // application at "http://localhost:8888", then BASE_URL should be "/".
-define('BASE_URL', '/');
+define('BASE_URL', '/comem-archidep-php-todo-exercise/');
 
 // Database connection parameters.
 define('DB_USER', 'todolist');
-define('DB_PASS', 'evabongni');
+define('DB_PASS', 'root');
 define('DB_NAME', 'todolist');
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');
@@ -44,7 +44,19 @@ if (isset($_POST['action'])) {
 
       $id = $_POST['id'];
       if(is_numeric($id)) {
-        $updateQuery = ''; // IMPLEMENT ME
+        $etatActuel = $db->query('SELECT done from todo WHERE id = '. $id);
+        $etatActuel->execute();
+        $etatActuel = $etatActuel->fetch(PDO::FETCH_ASSOC);
+        if ($etatActuel == 1) {
+          $nouvelEtat = 0;
+        } else {
+          $nouvelEtat = 1;
+        }
+        
+       /*  $nouvelEtat = $etatActuel['done'] == 1 ? 0:1; */
+        echo $nouvelEtat;
+        echo $nouvelEtat;
+        $updateQuery = 'UPDATE todo SET done = '. $nouvelEtat. 'WHERE id = '. $id;
         if(!$db->query($updateQuery)) {
           die(print_r($db->errorInfo(), true));
         }
@@ -60,7 +72,7 @@ if (isset($_POST['action'])) {
 
       $id = $_POST['id'];
       if(is_numeric($id)) {
-        $deleteQuery = ''; // IMPLEMENT ME
+        $deleteQuery = ' Delete from todo where id = '.$id; // IMPLEMENT ME
         if(!$db->query($deleteQuery)) {
           die(print_r($db->errorInfo(), true));
         }
@@ -77,7 +89,8 @@ if (isset($_POST['action'])) {
 /**
  * Select all tasks from the database.
  */
-$selectQuery = ''; // IMPLEMENT ME
+$selectQuery = 'select* from todo
+order by id desc'; // IMPLEMENT ME
 $items = $db->query($selectQuery);
 ?>
 
